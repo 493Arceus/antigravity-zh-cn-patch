@@ -142,6 +142,9 @@ fi
 echo -e "\033[1;36m[4/4] Applying app.asar.zh patch...\033[0m"
 cp -f "$ASAR_ZH" "$ASAR_PATH"
 
+# Clear updater pending download cache to dismiss "Restart to update" badge
+rm -rf "$HOME/Library/Caches/antigravity-updater/pending" 2>/dev/null || true
+
 # macOS Gatekeeper fix
 xattr -cr "$APP_PATH" 2>/dev/null || true
 codesign --force --deep --sign - "$APP_PATH" 2>/dev/null || true

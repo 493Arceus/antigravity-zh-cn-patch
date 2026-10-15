@@ -145,7 +145,20 @@ try {
         }
     }
 
-    # 3. Backup original app.asar
+    # 3. Detect official version & backup original app.asar
+    $detectedVersion = $null
+    if (Test-Path $asarPath) {
+        try {
+            $bytes = [System.IO.File]::ReadAllBytes($asarPath)
+            $str = [System.Text.Encoding]::ASCII.GetString($bytes)
+            $match = [regex]::Match($str, '\"version\":\s*\"([0-9]+\.[0-9]+\.[0-9]+)\"')
+            if ($match.Success) {
+                $detectedVersion = $match.Groups[1].Value
+                Write-Host ("      Detected official app version: " + $detectedVersion) -ForegroundColor Gray
+            }
+        } catch {}
+    }
+
     if (-not (Test-Path $asarBakPath)) {
         Write-Host "[3/4] Backing up original app.asar..." -ForegroundColor Cyan
         Copy-Item -Path $asarPath -Destination $asarBakPath -Force
@@ -172,6 +185,30 @@ try {
         Write-Host "[ERROR] Failed to overwrite app.asar, file locked!" -ForegroundColor Red
         Exit 1
     } else {
+        # Sync version into patched app.asar to prevent auto-updater false alarms
+        if ($detectedVersion) {
+            try {
+                $destBytes = [System.IO.File]::ReadAllBytes($asarPath)
+                $destStr = [System.Text.Encoding]::ASCII.GetString($destBytes)
+                $match = [regex]::Match($destStr, '\"version\":\s*\"([0-9]+\.[0-9]+\.[0-9]+)\"')
+                if ($match.Success -and $match.Groups[1].Value -ne $detectedVersion) {
+                    $oldVer = $match.Groups[1].Value
+                    if ($oldVer.Length -eq $detectedVersion.Length) {
+                        $newBytes = [System.Text.Encoding]::ASCII.GetBytes('"' + $detectedVersion + '"')
+                        [System.Buffer]::BlockCopy($newBytes, 0, $destBytes, $match.Groups[1].Index - 1, $newBytes.Length)
+                        [System.IO.File]::WriteAllBytes($asarPath, $destBytes)
+                        Write-Host ("      Synced version to: " + $detectedVersion) -ForegroundColor Gray
+                    }
+                }
+            } catch {}
+        }
+
+        # Clear updater pending download cache to dismiss "Restart to update" badge
+        $pendingDir = Join-Path $env:LOCALAPPDATA "antigravity-updater\pending"
+        if (Test-Path $pendingDir) {
+            Remove-Item (Join-Path $pendingDir "*") -Recurse -Force -ErrorAction SilentlyContinue
+        }
+
         Write-Host "========================================" -ForegroundColor Cyan
         Write-Host " [SUCCESS] Chinese localization applied!" -ForegroundColor Green
         Write-Host "========================================" -ForegroundColor Cyan
