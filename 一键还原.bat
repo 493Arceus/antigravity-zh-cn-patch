@@ -1,5 +1,6 @@
 @echo off
 setlocal
+chcp 65001 >nul
 title AntiGravity Chinese Localization Restore
 echo ========================================
 echo   AntiGravity Chinese Patch Restore
@@ -22,5 +23,14 @@ if not exist "%PS_SCRIPT%" (
 echo Running: "%PS_SCRIPT%"
 echo.
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PS_SCRIPT%"
-echo.
-pause
+if %ERRORLEVEL% EQU 0 (
+    echo.
+    echo [OK] Restored to official original successfully. Closing in 2 seconds...
+    timeout /t 2 >nul 2>&1
+    exit /b 0
+) else (
+    echo.
+    echo [ERROR] Restore failed. Please check the error message above.
+    pause
+    exit /b %ERRORLEVEL%
+)
