@@ -1,10 +1,13 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-14T06:56:50.145Z
+ * Auto-generated: 2026-10-15T23:41:32.535Z
  */
 (function() {
   'use strict';
+
+  if (window.__AGY_ZH_CN_INITIALIZED__) return;
+  window.__AGY_ZH_CN_INITIALIZED__ = true;
 
   // 1. Comprehensive Master Dictionary
   const DICT = {
@@ -406,6 +409,27 @@
   "Signed in as": "当前登录账号：",
   "Your Plan: ": "当前套餐：",
   "Your Plan: Google AI Ultra": "当前套餐：Google AI Ultra",
+  "Gemini 4 Argon": "Gemini 4 Argon",
+  "Gemini 4 Argon Weekly Limit": "Gemini 4 Argon 每周额度",
+  "Gemini 4 Argon 5-Hour Limit": "Gemini 4 Argon 5小时滚动额度",
+  "Gemini 4 Argon Five Hour Limit": "Gemini 4 Argon 5小时滚动额度",
+  "Weekly Limit": "每周额度",
+  "Five Hour Limit": "5小时滚动额度",
+  "5-Hour Limit": "5小时滚动额度",
+  "Daily Limit": "每日额度",
+  "Monthly Limit": "每月额度",
+  "Refreshing...": "正在刷新...",
+  "Refreshing": "正在刷新",
+  "Your quota for this model is running low.": "该模型的可用配额即将耗尽。",
+  "New models have been enabled for you!": "已为您启用新模型！",
+  "Select a model in the model selector": "请在模型选择器中选择模型",
+  "Dismiss Tip": "忽略提示",
+  "Custom models are only supported on Linux machines.": "自定义模型仅支持在 Linux 系统上运行。",
+  "Edit Model": "编辑模型",
+  "Add Model": "添加模型",
+  "Loading models...": "正在加载模型列表...",
+  "No models available": "暂无可用模型",
+  "GPT-OSS will be removed from Antigravity on November 2, 2026.": "GPT-OSS 将于 2026 年 11 月 2 日从 AntiGravity 中下线。",
   "Refresh quota and credits data": "刷新配额与额度数据",
   "No quota information available.": "暂无可用配额信息。",
   "No token data available.": "暂无可用 Token 数据。",
@@ -757,8 +781,106 @@
       .replace(/([0-9]+)\s*seconds?/gi, '$1 秒');
   }
 
+  // Helper for short duration strings like "6d 23h", "5d 3h", "3h 18m", "<1m"
+  function translateShortDuration(str) {
+    if (!str || typeof str !== 'string') return str;
+    const trimmed = str.trim();
+    if (trimmed === '<1m') return '1 分钟内';
+    return trimmed
+      .replace(/([0-9]+)\s*d\s*([0-9]+)\s*h/gi, '$1 天 $2 小时')
+      .replace(/([0-9]+)\s*h\s*([0-9]+)\s*m/gi, '$1 小时 $2 分钟')
+      .replace(/([0-9]+)\s*m\s*([0-9]+)\s*s/gi, '$1 分钟 $2 秒')
+      .replace(/([0-9]+)\s*d/gi, '$1 天')
+      .replace(/([0-9]+)\s*h/gi, '$1 小时')
+      .replace(/([0-9]+)\s*m/gi, '$1 分钟')
+      .replace(/([0-9]+)\s*s/gi, '$1 秒');
+  }
+
   // 4. High-Precision Regular Expression Patterns
   const PATTERNS = [
+    // Dynamic Model Quota Limits (e.g. "Gemini 4 Argon Weekly Limit", "Claude Sonnet 5.5 Weekly Limit")
+    {
+      regex: /^(.+?)\s+Weekly Limit(?:\s+Remaining)?$/i,
+      replacer: function(_, model) {
+        return model + ' 每周额度';
+      }
+    },
+    {
+      regex: /^(.+?)\s+(?:5-Hour|Five Hour)\s+Limit(?:\s+Remaining)?$/i,
+      replacer: function(_, model) {
+        return model + ' 5小时滚动额度';
+      }
+    },
+    {
+      regex: /^(.+?)\s+Daily Limit(?:\s+Remaining)?$/i,
+      replacer: function(_, model) {
+        return model + ' 每日额度';
+      }
+    },
+    {
+      regex: /^(.+?)\s+Monthly Limit(?:\s+Remaining)?$/i,
+      replacer: function(_, model) {
+        return model + ' 每月额度';
+      }
+    },
+
+    // Reset countdowns in quota badge (e.g. "Resets in 6d 23h", "Resets in <1m")
+    {
+      regex: /^Resets?\s+in\s*(.+)$/i,
+      replacer: function(_, dur) {
+        return '将在 ' + translateShortDuration(dur) + ' 后重置';
+      }
+    },
+    {
+      regex: /^Refreshes?\s+in\s*(.+)$/i,
+      replacer: function(_, dur) {
+        return '将在 ' + translateShortDuration(dur) + ' 后刷新';
+      }
+    },
+
+    // Shared with
+    {
+      regex: /^Shared with:\s*(.+)$/i,
+      replacer: function(_, target) {
+        return '共享对象：' + target;
+      }
+    },
+
+    // Model removal notices
+    {
+      regex: /^(.+?)\s+will be removed from Antigravity on\s*(.+?)\.?$/i,
+      replacer: function(_, model, dateStr) {
+        const cnDate = dateStr
+          .replace(/January\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 1 月 $1 日')
+          .replace(/February\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 2 月 $1 日')
+          .replace(/March\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 3 月 $1 日')
+          .replace(/April\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 4 月 $1 日')
+          .replace(/May\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 5 月 $1 日')
+          .replace(/June\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 6 月 $1 日')
+          .replace(/July\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 7 月 $1 日')
+          .replace(/August\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 8 月 $1 日')
+          .replace(/September\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 9 月 $1 日')
+          .replace(/October\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 10 月 $1 日')
+          .replace(/November\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 11 月 $1 日')
+          .replace(/December\s+([0-9]+),?\s*([0-9]+)/i, '$2 年 12 月 $1 日');
+        return model + ' 将于 ' + cnDate + ' 从 AntiGravity 中下线。';
+      }
+    },
+
+    // Model selection trigger
+    {
+      regex: /^Select model, current:\s*(.+)$/i,
+      replacer: function(_, cur) {
+        return '选择模型，当前：' + cur;
+      }
+    },
+    {
+      regex: /^Select model with\s*(.+)$/i,
+      replacer: function(_, key) {
+        return '使用快捷键 ' + key + ' 选择模型';
+      }
+    },
+
     // Dynamic Quota Strings
     {
       regex: /^You have used some of your weekly limit, it will fully refresh in\s*(.+?)\.?$/i,
@@ -843,7 +965,7 @@
       return true;
     }
     if (element.closest) {
-      if (element.closest('.react-markdown, .markdownChunk, .markdown, .monaco-editor, pre, code, [contenteditable="true"]')) {
+      if (element.closest('.react-markdown, .markdownChunk, .markdown, .monaco-editor, pre, code, [contenteditable="true"], .agy-token-rate-container, #agy-metrics-popover')) {
         return true;
       }
     }
@@ -916,6 +1038,21 @@
     }
     if (trimmed.startsWith("Your Plan: ")) {
       return str.replace("Your Plan: ", "当前套餐：");
+    }
+    if (trimmed.startsWith("Resets in ")) {
+      const dur = trimmed.slice("Resets in ".length);
+      return str.replace(trimmed, '将在 ' + translateShortDuration(dur) + ' 后重置');
+    }
+    if (trimmed.startsWith("Shared with: ")) {
+      return str.replace("Shared with: ", "共享对象：");
+    }
+    if (trimmed.endsWith(" Weekly Limit")) {
+      const base = trimmed.slice(0, -" Weekly Limit".length);
+      return str.replace(trimmed, base + " 每周额度");
+    }
+    if (trimmed.endsWith(" Weekly Limit Remaining")) {
+      const base = trimmed.slice(0, -" Weekly Limit Remaining".length);
+      return str.replace(trimmed, base + " 每周剩余额度");
     }
 
     return null;

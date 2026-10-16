@@ -1,3 +1,7 @@
+param(
+    [switch]$WithTokenRate = $false
+)
+
 # AntiGravity Client Chinese Localization Installer
 $ErrorActionPreference = "Stop"
 
@@ -13,9 +17,13 @@ $exePath = Join-Path $appDir "Antigravity.exe"
 $sourceDir = $PSScriptRoot
 $asarZhPath = Join-Path $sourceDir "app.asar.zh"
 $zhJsPath = Join-Path $sourceDir "zh-CN.js"
+$tokenRateJsPath = Join-Path $sourceDir "token-rate.js"
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host " AntiGravity Client Chinese Localization" -ForegroundColor Green
+if ($WithTokenRate) {
+    Write-Host " [Optional Feature] Token Rate: ENABLED" -ForegroundColor Magenta
+}
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ("Patch source: " + $sourceDir) -ForegroundColor Gray
 Write-Host ("App path:     " + $appDir) -ForegroundColor Gray
@@ -39,6 +47,10 @@ if (-not (Test-Path $asarZhPath)) {
 if (-not (Test-Path $zhJsPath)) {
     Write-Host "[ERROR] Cannot find zh-CN.js!" -ForegroundColor Red
     Exit 1
+}
+
+if ($WithTokenRate -and -not (Test-Path $tokenRateJsPath)) {
+    Write-Host "[WARNING] token-rate.js not found in source dir, token rate feature will be skipped." -ForegroundColor Yellow
 }
 
 function Extract-EmbeddedWebBundle {
@@ -126,14 +138,30 @@ try {
         Write-Host "      Injecting zh-CN.js localization engine..." -ForegroundColor Gray
         Copy-Item -Path $zhJsPath -Destination (Join-Path $targetWebBundle "zh-CN.js") -Force
 
-        # Inject script tag into index.html
+        # Inject script tags into index.html
         $indexPath = Join-Path $targetWebBundle "index.html"
         if (Test-Path $indexPath) {
             $html = [System.IO.File]::ReadAllText($indexPath, [System.Text.Encoding]::UTF8)
             if ($html -notmatch "zh-CN\.js") {
                 $html = $html.Replace("</body>", "    <script defer src=""/zh-CN.js""></script>`n  </body>")
-                [System.IO.File]::WriteAllText($indexPath, $html, [System.Text.Encoding]::UTF8)
             }
+
+            # Optional: Deploy token-rate.js if requested
+            if ($WithTokenRate) {
+                if (Test-Path $tokenRateJsPath) {
+                    Write-Host "      Injecting optional token-rate.js extension..." -ForegroundColor Magenta
+                    Copy-Item -Path $tokenRateJsPath -Destination (Join-Path $targetWebBundle "token-rate.js") -Force
+                    $cacheBuster = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+                    $html = [regex]::Replace($html, '\s*<script(?: defer)? src="/token-rate\.js(?:\?[^"]*)?"></script>', '')
+                    if ($html -match "</head>") {
+                        $html = $html.Replace("</head>", "    <script src=""/token-rate.js?v=$cacheBuster""></script>`n  </head>")
+                    } else {
+                        $html = $html.Replace("</body>", "    <script src=""/token-rate.js?v=$cacheBuster""></script>`n  </body>")
+                    }
+                }
+            }
+
+            [System.IO.File]::WriteAllText($indexPath, $html, (New-Object System.Text.UTF8Encoding($false)))
         } else {
             Write-Host "[ERROR] index.html not found in extracted bundle!" -ForegroundColor Red
             Exit 1
@@ -151,7 +179,7 @@ try {
         try {
             $bytes = [System.IO.File]::ReadAllBytes($asarPath)
             $str = [System.Text.Encoding]::ASCII.GetString($bytes)
-            $match = [regex]::Match($str, '\"version\":\s*\"([0-9]+\.[0-9]+\.[0-9]+)\"')
+            $match = [regex]::Match($str, '\"productName\":\s*\"Antigravity\",\s*\"version\":\s*\"([0-9]+\.[0-9]+\.[0-9]+)\"')
             if ($match.Success) {
                 $detectedVersion = $match.Groups[1].Value
                 Write-Host ("      Detected official app version: " + $detectedVersion) -ForegroundColor Gray
@@ -190,7 +218,7 @@ try {
             try {
                 $destBytes = [System.IO.File]::ReadAllBytes($asarPath)
                 $destStr = [System.Text.Encoding]::ASCII.GetString($destBytes)
-                $match = [regex]::Match($destStr, '\"version\":\s*\"([0-9]+\.[0-9]+\.[0-9]+)\"')
+                $match = [regex]::Match($destStr, '\"productName\":\s*\"Antigravity\",\s*\"version\":\s*\"([0-9]+\.[0-9]+\.[0-9]+)\"')
                 if ($match.Success -and $match.Groups[1].Value -ne $detectedVersion) {
                     $oldVer = $match.Groups[1].Value
                     if ($oldVer.Length -eq $detectedVersion.Length) {

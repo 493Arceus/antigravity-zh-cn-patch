@@ -2,9 +2,18 @@
 set -e
 
 # AntiGravity Client Chinese Localization Installer (macOS)
+WITH_TOKEN_RATE=false
+for arg in "$@"; do
+    if [ "$arg" == "--with-token-rate" ]; then
+        WITH_TOKEN_RATE=true
+    fi
+done
 
 echo -e "\033[1;36m========================================\033[0m"
 echo -e "\033[1;32m AntiGravity Chinese Patch (macOS)\033[0m"
+if [ "$WITH_TOKEN_RATE" = true ]; then
+    echo -e "\033[1;35m [Optional Feature] Token Rate: ENABLED\033[0m"
+fi
 echo -e "\033[1;36m========================================\033[0m"
 
 # 1. Locate Application
@@ -29,6 +38,7 @@ TARGET_WEB_BUNDLE="$RES_DIR/web_bundle_zh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASAR_ZH="$SCRIPT_DIR/app.asar.zh"
 ZH_JS="$SCRIPT_DIR/zh-CN.js"
+TOKEN_RATE_JS="$SCRIPT_DIR/token-rate.js"
 
 echo -e "\033[0;37mPatch source: $SCRIPT_DIR\033[0m"
 echo -e "\033[0;37mApp path:     $APP_PATH\033[0m"
@@ -122,6 +132,27 @@ content = content.replace('</body>', '    <script defer src=\"/zh-CN.js\"></scri
 with open('$INDEX_HTML', 'w', encoding='utf-8') as f:
     f.write(content)
 "
+    fi
+
+    # Optional: Deploy token-rate.js if requested
+    if [ "$WITH_TOKEN_RATE" = true ]; then
+        if [ -f "$TOKEN_RATE_JS" ]; then
+            echo -e "\033[1;35m      Injecting optional token-rate.js extension...\033[0m"
+            cp -f "$TOKEN_RATE_JS" "$TARGET_WEB_BUNDLE/token-rate.js"
+            python3 -c "
+import re, time
+with open('$INDEX_HTML', 'r', encoding='utf-8') as f:
+    content = f.read()
+ts = int(time.time())
+content = re.sub(r'\s*<script(?: defer)? src=\"/token-rate\.js(?:\?[^\"]*)?\"></script>', '', content)
+if '</head>' in content:
+    content = content.replace('</head>', f'    <script src=\"/token-rate.js?v={ts}\"></script>\n  </head>')
+else:
+    content = content.replace('</body>', f'    <script src=\"/token-rate.js?v={ts}\"></script>\n  </body>')
+with open('$INDEX_HTML', 'w', encoding='utf-8') as f:
+    f.write(content)
+"
+        fi
     fi
 else
     echo -e "\033[1;31m[ERROR] index.html not found in extracted bundle!\033[0m"
