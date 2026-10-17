@@ -28,16 +28,16 @@
 
 ## ✨ 核心特性
 
-- ⚡ **一键跨平台安装与还原**：
-  提供 Windows 批处理/PowerShell 以及 macOS Shell 脚本，全自动从本机提取官方资源并无缝挂载汉化引擎，3 秒搞定。
-- 📊 **可选实时 Token 速率与缓存命中率监控（默认不安装）**：
-  在底部输入框模型选择器右侧无缝挂载高精度 Token 性能双徽标仪表盘：
+- ⚡ **一键跨平台安装与管理向导**：
+  提供 Windows 统一批处理 `一键安装.bat` 与 macOS Shell 脚本 `install.sh`，运行即刻进入向导，安装时供用户自主选择是否安装 Token 速率监控扩展，同时支持一键开关扩展与一键还原。
+- 📊 **实时 Token 速率与缓存命中率监控（跨平台全兼容，安装时可选）**：
+  **100% 兼容 Windows 与 macOS**。在底部输入框模型选择器右侧无缝挂载高精度 Token 性能双徽标仪表盘：
   - **工业级测速算法**：**首字延迟（TTFT）与解码生成彻底剥离**，剔除预填充排队延迟，真实反映模型吐字流速
   - **Prompt 缓存命中率实时统计**：实时统计已缓存 Context Token 与新增 Prompt Token，直观展示缓存命中百分比（`🎯 98.0%`）与 Token 明细，单击徽标可在百分比与明细间切换
   - **瞬时响应式悬浮数据卡片**：彻底解决浏览器原生 `title` 延迟及不显示问题，鼠标悬停（30ms 极速响应）即弹出高颜值毛玻璃信息卡片，呈现速率、缓存命中率进度条、Token 明细（已缓存/未缓存/输出总量）及纯解码耗时与 TTFT 耗时
   - **滑动时间窗口（1.8s）与 EMA 平滑**：消除瞬时网络抖动，流式生成平滑灵敏；生成结束展示全周期精确均速
   - **单击徽标即时切换**：单击速率徽标在 `tok/s` 与 `tok/m` 间切换，单击缓存徽标在百分比与明细间切换，本地自动持久化
-  - **纯可选非侵入扩展**：默认不安装，提供一键开启与一键关闭脚本，热重载即刻生效
+  - **纯可选非侵入扩展**：安装时自主选择是否启用，后续亦可通过向导随时一键开启或关闭，热重载即刻生效
 - 🎯 **像素级全景深度覆盖**：
   - **顶部菜单栏**：文件、视图、窗口及点击展开的二级子菜单（新建对话、命令面板、缩放调整、全屏控制等）。
   - **模型与配额中心**：套餐信息（`Google AI Pro` / `Ultra`）、每周/五小时滚动剩余配额、剩余刷新倒计时、超额额度抵扣开关等。
@@ -54,55 +54,55 @@
 
 ### 🪟 Windows 用户
 
-#### 方式一：一键安装（推荐）
+#### 方式一：一键安装向导（推荐）
 1. 点击本仓库右上角 **`Code`** ➔ **`Download ZIP`**（或通过 `git clone` 下载）。
-2. 解压到任意目录，双击运行目录下的 **`一键汉化.bat`**。
-3. 脚本会自动检测进程、从本机合法提取资源、注入汉化并重新拉起客户端，打开即为纯中文界面！
+2. 解压到任意目录，双击运行目录下的 **`一键安装.bat`**。
+3. 在弹出的交互菜单中按需选择（直接回车默认推荐安装 `[2]`）：
+   - `[1]` **安装完整汉化（标准纯净版）**
+   - `[2]` **安装完整汉化 + 实时 Token 速率与缓存监控扩展 (推荐)**
+   - `[3]` **单独开启 Token 速率监控扩展（需已安装汉化）**
+   - `[4]` **单独关闭 Token 速率监控扩展**
+   - `[5]` **一键卸载汉化，还原官方英文原版**
+   - `[0]` **退出**
+4. 脚本会自动检测进程、从本机合法提取资源、注入汉化并重新拉起客户端，打开即生效！
 
-> 💡 **提示**：如果系统拦截批处理，请允许运行，或在 PowerShell 中直接执行 `.\install-cn.ps1`。
-
-#### 方式二：开启实时 Token 速率扩展（可选，默认不安装）
-- **一键开启**：双击运行 **`一键开启Token速率.bat`**（或在 PowerShell 执行 `.\manage-token-rate.ps1 -Action Enable`）。
-- **一键关闭**：双击运行 **`一键关闭Token速率.bat`**（或在 PowerShell 执行 `.\manage-token-rate.ps1 -Action Disable`）。
-- **全新安装时直接包含速率扩展**：在 PowerShell 中执行 `.\install-cn.ps1 -WithTokenRate`。
-
-#### 方式三：一键还原官方英文
-双击运行目录下的 **`一键还原.bat`**（或执行 `.\uninstall-cn.ps1`）。
+> 💡 **高级用法（PowerShell 命令行自动化）**：
+> - 交互向导：`.\install-cn.ps1`
+> - 带速率直接安装：`.\install-cn.ps1 -WithTokenRate`
+> - 标准纯净安装：`.\install-cn.ps1`
+> - 开启/关闭速率扩展：`.\install-cn.ps1 -Action EnableTokenRate` / `DisableTokenRate`
+> - 还原英文原版：`.\install-cn.ps1 -Action Uninstall`
 
 ---
 
 ### 🍎 macOS 用户
 
-#### 方式一：一键安装（推荐）
+#### 方式一：一键安装向导（推荐）
 1. 打开终端（Terminal），克隆或下载解压本仓库：
    ```bash
    git clone https://github.com/493Arceus/antigravity-zh-cn-patch.git
    cd antigravity-zh-cn-patch
    ```
-2. 执行一键安装脚本：
+2. 执行一键安装向导脚本：
    ```bash
-   chmod +x install-cn.sh uninstall-cn.sh
-   ./install-cn.sh
+   chmod +x install-cn.sh install.sh
+   ./install.sh
+   # 或者执行: ./install-cn.sh
    ```
-3. 脚本会自动定位 `/Applications/Antigravity.app`，安全注入汉化并自动处理 macOS Gatekeeper 签名校验！
+3. 在交互向导中输入选项数字 `[1-5]` 选择对应模式（直接回车默认推荐安装 `[2]`）：
+   - `[1]` **安装完整汉化（标准纯净版）**
+   - `[2]` **安装完整汉化 + 实时 Token 速率与缓存监控扩展 (推荐)**
+   - `[3]` **单独开启 Token 速率监控扩展**
+   - `[4]` **单独关闭 Token 速率监控扩展**
+   - `[5]` **一键卸载汉化，还原官方英文原版**
+4. 脚本会自动定位 `/Applications/Antigravity.app`，安全注入汉化并自动处理 macOS Gatekeeper 签名校验！
 
-#### 方式二：开启实时 Token 速率扩展（可选，默认不安装）
-- **开启速率扩展**：在终端执行：
-  ```bash
-  chmod +x manage-token-rate.sh
-  ./manage-token-rate.sh enable
-  ```
-- **关闭速率扩展**：在终端执行：
-  ```bash
-  ./manage-token-rate.sh disable
-  ```
-- **全新安装时直接包含速率扩展**：执行 `./install-cn.sh --with-token-rate`。
+> 💡 **终端命令行自动化支持**：
+> - 带速率直接安装：`./install.sh --with-token-rate`
+> - 标准纯净安装：`./install.sh --standard`
+> - 开启/关闭速率扩展：`./install.sh --enable-token-rate` / `--disable-token-rate`
+> - 还原英文原版：`./install.sh --uninstall`
 
-#### 方式三：一键还原官方英文
-在终端中执行：
-```bash
-./uninstall-cn.sh
-```
 
 ---
 

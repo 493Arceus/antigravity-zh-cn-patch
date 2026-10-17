@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-15T23:41:32.535Z
+ * Auto-generated: 2026-10-17T00:41:16.523Z
  */
 (function() {
   'use strict';
@@ -278,7 +278,7 @@
   "Save": "保存",
   "Cancel": "取消",
   "Delete": "删除",
-  "Delete Conversation": "删除对话",
+  "Delete Conversation": "删除会话",
   "Delete Task": "删除任务",
   "Delete Skill": "删除技能",
   "Delete MCP Server": "删除 MCP 服务",
@@ -384,7 +384,7 @@
   "Canceled edit to": "已取消对以下文件的编辑：",
   "File Diff Comments": "代码比对评论",
   "File Comments": "文件评论",
-  "Are you sure you want to delete this conversation? This action cannot be undone.": "确定要删除此对话吗？此操作无法撤销。",
+  "Are you sure you want to delete this conversation? This action cannot be undone.": "您确定要删除此会话吗？此操作无法撤销。",
   "Are you sure you want to delete": "确定要删除吗：",
   "Just now": "刚刚",
   "Untitled Conversation": "未命名对话",
@@ -757,7 +757,57 @@
   "Click to Open Docs": "点击打开官方文档",
   "Click to open docs": "点击打开官方文档",
   "Open Drive bundle": "打开 Drive 资源包",
-  "Download PDF": "下载 PDF 文档"
+  "Download PDF": "下载 PDF 文档",
+  "Pin": "置顶",
+  "Unpin": "取消置顶",
+  "Pin tab": "固定标签页",
+  "Unpin tab": "取消固定标签页",
+  "Pin This Conversation": "置顶此会话",
+  "Unpin This Conversation": "取消置顶此会话",
+  "Pin conversation": "置顶会话",
+  "Unpin conversation": "取消置顶会话",
+  "Mark Read": "标记为已读",
+  "Mark Unread": "标记为未读",
+  "Mark as Read": "标记为已读",
+  "Mark as Unread": "标记为未读",
+  "Mark This Conversation as Read": "将此会话标记为已读",
+  "Mark This Conversation as Unread": "将此会话标记为未读",
+  "Split": "拆分",
+  "Split Right": "向右拆分",
+  "Split Down": "向下拆分",
+  "Replace With New": "替换为新建",
+  "Remove From Split": "从拆分视图中移除",
+  "Equalize Split Panes": "均分拆分面板",
+  "Split Conversation Vertically": "垂直拆分会话",
+  "Split Conversation Horizontally": "水平拆分会话",
+  "Fork": "分支",
+  "Fork conversation": "创建分支会话",
+  "Forked conversation": "已创建分支的会话",
+  "Fork conversation in this folder": "在此文件夹中创建分支会话",
+  "Fork in Current Workspace": "在当前工作区创建分支",
+  "Fork in Shared Workspace": "在共享工作区创建分支",
+  "Fork in New Workspace": "在新工作区创建分支",
+  "Move to Group": "移动到分组",
+  "Move to New Group": "移动到新分组",
+  "New Group": "新建分组",
+  "Remove from Group": "从分组中移除",
+  "Archive": "归档",
+  "Archive / Restore": "归档 / 恢复",
+  "Archive This Conversation": "归档此会话",
+  "Archive Workspace": "归档工作区",
+  "Archive conversation": "归档会话",
+  "Restore conversation": "恢复会话",
+  "Delete conversation": "删除会话",
+  "Restore": "恢复",
+  "Delete Handler": "删除处理器",
+  "Conversation Name": "会话名称",
+  "Conversation ID": "会话 ID",
+  "Worktree Name": "工作树名称",
+  "View Debug": "查看调试信息",
+  "Telemetry": "遥测记录",
+  "More options": "更多选项",
+  "Stop execution": "停止执行",
+  "Share Conversation (Preview)": "共享会话 (预览)"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -928,6 +978,18 @@
       regex: /^Version\s+([0-9.]+)$/i,
       replace: "版本 $1"
     },
+    {
+      regex: /^Move to Group:\s*(.+)$/i,
+      replacer: function(_, groupName) {
+        return '移动到分组：' + groupName;
+      }
+    },
+    {
+      regex: /^Forked from\s*(.+)$/i,
+      replacer: function(_, origin) {
+        return '分支自 ' + origin;
+      }
+    },
 
     // File and Task Counts
     { regex: /^([0-9]+)\s+files?\s+changed$/i, replace: "$1 个文件已修改" },
@@ -965,7 +1027,7 @@
       return true;
     }
     if (element.closest) {
-      if (element.closest('.react-markdown, .markdownChunk, .markdown, .monaco-editor, pre, code, [contenteditable="true"], .agy-token-rate-container, #agy-metrics-popover')) {
+      if (element.closest('.react-markdown, .markdownChunk, .markdown, .monaco-editor, pre, code, [contenteditable="true"]')) {
         return true;
       }
     }
@@ -1146,9 +1208,62 @@
     }
   });
 
-  // 9. Initial Scan & Observer Activation
+  // 10. Native Context Menu Translation Interceptor
+  function hookContextMenu() {
+    try {
+      function translateCmiList(list) {
+        if (!Array.isArray(list)) return list;
+        return list.map(item => {
+          if (!item) return item;
+          const copy = { ...item };
+          if (typeof copy.label === 'string' && copy.label.trim()) {
+            copy.label = translateString(copy.label) || copy.label;
+          }
+          if (Array.isArray(copy.items)) {
+            copy.items = translateCmiList(copy.items);
+          }
+          if (Array.isArray(copy.submenu)) {
+            copy.submenu = translateCmiList(copy.submenu);
+          }
+          return copy;
+        });
+      }
+
+      if (window.electronNative && typeof window.electronNative.showContextMenu === 'function') {
+        const orig = window.electronNative.showContextMenu;
+        if (!orig.__zh_patched__) {
+          const wrapped = function(items) {
+            return orig.call(window.electronNative, translateCmiList(items));
+          };
+          wrapped.__zh_patched__ = true;
+          try {
+            window.electronNative.showContextMenu = wrapped;
+          } catch (e) {
+            try {
+              const origObj = window.electronNative;
+              const proxy = new Proxy({}, {
+                get(target, prop) {
+                  if (prop === 'showContextMenu') return wrapped;
+                  const val = origObj[prop];
+                  return typeof val === 'function' ? val.bind(origObj) : val;
+                }
+              });
+              Object.defineProperty(window, 'electronNative', {
+                value: proxy,
+                configurable: true,
+                writable: true
+              });
+            } catch (e2) {}
+          }
+        }
+      }
+    } catch (err) {}
+  }
+
+  // 11. Initial Scan & Observer Activation
   function init() {
     try {
+      hookContextMenu();
       if (document.body) {
         translateNode(document.body);
         observer.observe(document.body, {

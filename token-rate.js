@@ -782,11 +782,11 @@
     let statusBadge = '';
     if (store.turnState === 'waiting') {
       const elapsed = Math.max(0, (performance.now() - store.requestStartTime) / 1000).toFixed(1);
-      statusBadge = `<span class="agy-tag agy-tag-waiting"><span class="agy-token-dot"></span> 等待首字 (${elapsed}s)</span>`;
+      statusBadge = `<div class="agy-status-wrap" title="运行分析中 (等待首字 ${elapsed}s)"><span class="agy-status-indicator agy-status-waiting agy-status-running"></span></div>`;
     } else if (store.turnState === 'streaming') {
-      statusBadge = `<span class="agy-tag agy-tag-streaming"><span class="agy-token-dot"></span> 实时解码中</span>`;
+      statusBadge = `<div class="agy-status-wrap" title="运行分析中 (实时解码生成)"><span class="agy-status-indicator agy-status-streaming agy-status-running"></span></div>`;
     } else {
-      statusBadge = `<span class="agy-tag agy-tag-idle">⚡ 实时会话监测</span>`;
+      statusBadge = `<div class="agy-status-wrap" title="待机中"><span class="agy-status-indicator agy-status-idle"></span></div>`;
     }
 
     const hitRatePercent = cache.rate !== null ? `${cache.rate.toFixed(1)}%` : '--%';
@@ -815,11 +815,6 @@
               ? Math.max(0, (store.firstTokenTime - store.requestStartTime) / 1000).toFixed(2)
               : Math.max(0, (performance.now() - store.requestStartTime) / 1000).toFixed(1)))
       : (store.lastTurnStats.ttft > 0 ? Number(store.lastTurnStats.ttft).toFixed(2) : '0.00');
-
-    const totalCostUsd = store.officialCostSummary.costUsd > 0
-      ? store.officialCostSummary.costUsd
-      : store.stepsUsageSummary.costUsd;
-    const costText = totalCostUsd > 0 ? `$${totalCostUsd.toFixed(4)}` : '--';
 
     const nextHtml = `
       <div class="agy-card-header">
@@ -866,10 +861,6 @@
           <div class="agy-grid-item">
             <span class="agy-grid-label">累计总输出:</span>
             <span class="agy-grid-val">${sessionOutTokens > 0 ? formatCompactNumber(sessionOutTokens) : '--'}</span>
-          </div>
-          <div class="agy-grid-item">
-            <span class="agy-grid-label">预估成本 (USD):</span>
-            <span class="agy-grid-val">${costText}</span>
           </div>
         </div>
       </div>
@@ -1160,6 +1151,49 @@
         font-weight: 600;
         font-size: 12px;
         color: var(--color-foreground, inherit);
+      }
+      .agy-status-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        cursor: default;
+        user-select: none;
+      }
+      .agy-status-indicator {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+      .agy-status-indicator.agy-status-idle {
+        border: 1.5px solid var(--color-muted-foreground, #9ca3af);
+        background-color: transparent;
+        opacity: 0.75;
+      }
+      .agy-status-wrap:hover .agy-status-indicator.agy-status-idle {
+        opacity: 1;
+        border-color: var(--color-foreground, #6b7280);
+      }
+      @keyframes agy-status-breath {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7), 0 0 4px rgba(16, 185, 129, 0.4);
+        }
+        50% {
+          transform: scale(0.88);
+          opacity: 0.45;
+          box-shadow: 0 0 6px 2px rgba(16, 185, 129, 0.15), 0 0 1px rgba(16, 185, 129, 0.2);
+        }
+      }
+      .agy-status-indicator.agy-status-running {
+        background-color: #10b981;
+        animation: agy-status-breath 1.4s ease-in-out infinite;
       }
       .agy-tag {
         font-size: 10px;
