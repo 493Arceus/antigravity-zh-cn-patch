@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-26T07:00:53.030Z
+ * Auto-generated: 2026-10-26T09:34:45.104Z
  */
 (function() {
   'use strict';
@@ -1194,7 +1194,16 @@
   "Sidebar grouped by workspace": "侧边栏按工作区分组",
   "Uncommitted": "未提交",
   "Zoom in": "放大",
-  "Zoom out": "缩小"
+  "Zoom out": "缩小",
+  "Enable Overages": "启用超额抵扣",
+  "Get More AI Credits": "获取更多 AI 额度",
+  "AI Credits Used to Generate Response": "生成回复消耗的 AI 额度",
+  "Your AI credits balance is too low to continue.": "您的 AI 额度余额过低，无法继续。",
+  "Audio file size exceeds 20MB limit": "音频文件大小超过 20MB 限制",
+  "Document file size exceeds 10MB limit": "文档文件大小超过 10MB 限制",
+  "PDF file size exceeds 10MB limit": "PDF 文件大小超过 10MB 限制",
+  "Text file size exceeds 1MB limit": "文本文件大小超过 1MB 限制",
+  "Zip file size exceeds 20MB limit": "Zip 文件大小超过 20MB 限制"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1231,6 +1240,17 @@
       .replace(/([0-9]+)\s*h/gi, '$1 小时')
       .replace(/([0-9]+)\s*m/gi, '$1 分钟')
       .replace(/([0-9]+)\s*s/gi, '$1 秒');
+  }
+
+  // Helper for limit names (e.g. "5-hour", "weekly", "daily")
+  function formatLimitName(str) {
+    if (!str || typeof str !== 'string') return str;
+    const clean = str.trim().toLowerCase();
+    if (clean === '5-hour' || clean === '5 hour' || clean === 'five hour' || clean === 'five-hour') return '5 小时';
+    if (clean === 'weekly' || clean === 'week') return '每周';
+    if (clean === 'daily' || clean === 'day') return '每日';
+    if (clean === 'monthly' || clean === 'month') return '每月';
+    return str.trim();
   }
 
   // 4. High-Precision Regular Expression Patterns
@@ -1319,6 +1339,67 @@
     },
 
     // Dynamic Quota Strings
+    // Dynamic Model Quota Limit Hit (User Reported)
+    {
+      regex: /^You have hit your (.+?) limit, so the (.+?) limit does not currently apply\.\s*Your (.+?) limit will refresh in\s*(.+?)\.?$/i,
+      replacer: function(_, lim1, lim2, lim3, rest) {
+        return '您已达到 ' + formatLimitName(lim1) + '额度上限，因此' + formatLimitName(lim2) + '额度当前不适用。您的 ' + formatLimitName(lim3) + '额度将在 ' + translateTimePhrases(rest.replace(/\.$/, '')) + ' 后完全刷新。';
+      }
+    },
+    {
+      regex: /^You have hit your (.+?) limit, it will refresh in\s*(.+?)\.\s*If on a supported paid plan, you can use AI credits in the interim\.?$/i,
+      replacer: function(_, lim, rest) {
+        return '您已达到 ' + formatLimitName(lim) + '额度上限，将在 ' + translateTimePhrases(rest.replace(/\.$/, '')) + ' 后刷新。如果您使用的是受支持的付费方案，期间可使用 AI 额外额度。';
+      }
+    },
+    {
+      regex: /^You have hit your (.+?) limit, it will (?:fully )?refresh in\s*(.+?)\.?$/i,
+      replacer: function(_, lim, rest) {
+        return '您已达到 ' + formatLimitName(lim) + '额度上限，将在 ' + translateTimePhrases(rest.replace(/\.$/, '')) + ' 后刷新。';
+      }
+    },
+    {
+      regex: /^Your (.+?) limit will (?:fully )?refresh in\s*(.+?)\.?$/i,
+      replacer: function(_, lim, rest) {
+        return '您的 ' + formatLimitName(lim) + '额度将在 ' + translateTimePhrases(rest.replace(/\.$/, '')) + ' 后刷新。';
+      }
+    },
+    {
+      regex: /^Your plan's baseline quota will refresh on\s*(.+?)\.\s*To continue using this model now, enable AI Credit overages\.?$/i,
+      replacer: function(_, timeStr) {
+        return '您的套餐基础配额将在 ' + timeStr + ' 刷新。若要立即继续使用此模型，请启用 AI 额外额度。';
+      }
+    },
+    {
+      regex: /^Your plan's baseline quota will refresh on\s*(.+?)\.?$/i,
+      replacer: function(_, timeStr) {
+        return '您的套餐基础配额将在 ' + timeStr + ' 刷新。';
+      }
+    },
+    {
+      regex: /^To continue using this model now, enable AI Credit overages\.?$/i,
+      replace: '若要立即继续使用此模型，请启用 AI 额外额度。'
+    },
+    {
+      regex: /^You need (.+?) AI Credits to send messages\.\s*To continue using (.+?) now, purchase more AI Credits\.?$/i,
+      replacer: function(_, amt, model) {
+        const m = (model === 'this model' ? '此模型' : model);
+        return '您需要 ' + amt + ' AI 额度才能发送消息。若要立即继续使用 ' + m + '，请购买更多 AI 额度。';
+      }
+    },
+    {
+      regex: /^You need (.+?) AI Credits to send messages\.?$/i,
+      replacer: function(_, amt) {
+        return '您需要 ' + amt + ' AI 额度才能发送消息。';
+      }
+    },
+    {
+      regex: /^To continue using (.+?) now, purchase more AI Credits\.?$/i,
+      replacer: function(_, model) {
+        const m = (model === 'this model' ? '此模型' : model);
+        return '若要立即继续使用 ' + m + '，请购买更多 AI 额度。';
+      }
+    },
     {
       regex: /^You have used some of your weekly limit, it will fully refresh in\s*(.+?)\.?$/i,
       replacer: function(_, rest) {
