@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-26T03:30:46.357Z
+ * Auto-generated: 2026-10-26T04:09:40.611Z
  */
 (function() {
   'use strict';
@@ -185,11 +185,11 @@
   "Ask before sensitive operations.": "执行敏感操作前进行确认。",
   "Security agent decides if commands run.": "由安全决策智能体判断命令是否可执行。",
   "Automatically decide if commands run.": "自动判断并决定命令是否允许执行。",
-  "Run all commands without restrictions.": "无限制运行所有命令（极速模式）。",
+  "Run all commands without restrictions.": "无限制运行所有命令 (极速模式)。",
   "Agent Behavior": "智能体行为",
   "Plan Review Policy": "规划审查策略",
   "Whether the agent asks you to review its documents.": "智能体是否要求您审查其规划文档。",
-  "Always Proceed": "始终允许继续",
+  "Always Proceed": "始终执行",
   "Always Ask": "始终询问",
   "Type": "输入",
   "and select": "并选择",
@@ -239,12 +239,12 @@
   "Narrow": "紧凑居中",
   "Wide": "宽屏居中",
   "Verbose Agent Chat": "详细思考过程",
-  "Display and preserve intermediate thinking steps.": "显示并保留智能体的完整中间思考步骤。",
+  "Display and preserve intermediate thinking steps.": "展示并保留思考过程步骤。",
   "Custom Context Menus": "自定义右键快捷菜单",
-  "Replace the default browser right-click menu with quick actions.": "使用快捷操作菜单替换默认的浏览器右键菜单。",
+  "Replace the default browser right-click menu with quick actions.": "使用右键快捷菜单替换默认浏览器右键菜单。",
   "Conversation Width": "对话面板宽度",
-  "Configure the maximum width of the conversation panel.": "配置文件对话面板的最大显示宽度。",
-  "Configure the default width of markdown artifacts.": "配置 Markdown 产物文档的默认显示宽度。",
+  "Configure the maximum width of the conversation panel.": "配置会话面板的最大宽度。",
+  "Configure the default width of markdown artifacts.": "配置 Markdown 产物视图的默认宽度。",
   "Theme": "界面主题",
   "Dark": "深色",
   "Light": "浅色",
@@ -471,10 +471,10 @@
   "Inline Actions": "行内操作浮卡",
   "Show a floating notification card when background conversations need your input. Answer questions, approve commands, and grant permissions without leaving your current conversation. Share feedback at go/inline-actions-feedback.": "当后台对话需要您的输入时显示悬浮通知卡片。无需离开当前对话即可回答问题、批准命令和授予权限。",
   "Adds an Autonomous Mode switch to the modes dropdown below the input box. Turns sent with it on run non-interactively: the agent does not ask questions or request new permissions.": "在输入框下方的模式下拉菜单中添加自主模式开关。开启后以非交互方式运行：智能体不会提问或请求新权限。",
-  "Let the agent access past conversations to inform its responses.": "允许智能体查阅过往对话历史以辅助回答。",
+  "Let the agent access past conversations to inform its responses.": "允许智能体访问过去的对话历史以作为回答参考。",
   "When enabled, the agent will be able to access past conversations to inform its responses.": "启用后，智能体将能够访问过往对话历史以辅助回答。",
   "Auto-Open Edited Files": "自动打开编辑过的文件",
-  "Open files in the background if the agent creates or edits them": "当智能体创建或编辑文件时在后台自动打开",
+  "Open files in the background if the agent creates or edits them": "当智能体创建或编辑文件时在后台自动打开文件",
   "Open files in the background if Agent creates or edits them": "当智能体创建或编辑文件时在后台自动打开",
   "Open Agent on Reload": "重载时打开智能体",
   "Open the agent panel on window reload": "在窗口重新加载时自动打开智能体面板",
@@ -873,7 +873,149 @@
   "Download image": "下载图片",
   "Download video": "下载视频",
   "Download feature is not available.": "下载功能暂不可用。",
-  "Download the bundle manually and share it instead:": "手动下载资源包并进行共享："
+  "Download the bundle manually and share it instead:": "手动下载资源包并进行共享：",
+  "Give Feedback": "意见反馈",
+  "Give feedback": "意见反馈",
+  "Show system notifications when your action is needed or the agent finishes.": "当需要您操作或智能体完成任务时显示系统通知。",
+  "Play a sound when your action is needed or the agent finishes.": "当需要您操作或智能体完成任务时播放提示音。",
+  "Chime volume": "提示声音量",
+  "Enable Notifications": "启用系统通知",
+  "Get notified when the agent needs your attention or completes a task.": "在智能体需要您的关注或完成任务时接收通知。",
+  "Download this site as an app to get notified when the agent needs your attention or completes a task.": "将此网站下载为应用，以便在智能体需要您的关注或完成任务时接收通知。",
+  "Got it": "知道了",
+  "Block": "阻止",
+  "Allow": "允许",
+  "Configure global allowed and denied resource permissions.": "配置全局允许和禁止的资源权限。",
+  "Configure global allowed and denied resource permissions": "配置全局允许和禁止的资源权限",
+  "when working": "在",
+  "when working ": "在 ",
+  "in this project": "此项目中工作时生效",
+  "in this project.": "此项目中工作时生效。",
+  "in these conversations": "这些会话中工作时生效",
+  "in these conversations.": "这些会话中工作时生效。",
+  "when working in this project": "在此项目中工作时生效",
+  "when working in this project.": "在此项目中工作时生效。",
+  "when working in these conversations": "在这些会话中工作时生效",
+  "when working in these conversations.": "在这些会话中工作时生效。",
+  "Inherits your Global Permissions when working in this project.": "在此项目中工作时继承您的全局权限。",
+  "Inherits your Global Permissions when working in these conversations.": "在这些会话中工作时继承您的全局权限。",
+  "Inherits your Global Permissions": "继承您的全局权限",
+  "Manually customize individual settings.": "手动自定义各项权限设置。",
+  "Manage project folders, agent settings, and permissions.": "管理项目文件夹、智能体设置及权限。",
+  "Manage project resources, agent settings, and permissions.": "管理项目资源、智能体设置及权限。",
+  "Agent settings and permissions for conversations outside of projects.": "项目外部会话的智能体设置及权限。",
+  "A project with this name already exists.": "已存在同名项目。",
+  "Edit project name": "编辑项目名称",
+  "Edit workspace name": "编辑工作区名称",
+  "Folders": "项目文件夹",
+  "Add Folder": "添加文件夹",
+  "+ Add Folder": "+ 添加文件夹",
+  "Add Resource": "添加资源",
+  "+ Add Resource": "+ 添加资源",
+  "No folders added yet.": "尚未添加任何文件夹。",
+  "No resources added yet.": "尚未添加任何资源。",
+  "All Workspaces": "所有工作区",
+  "A shell setup script run before every command the agent executes in this project. Overrides the global script.": "智能体在此项目中执行每条命令前运行的 Shell 初始化脚本。将覆盖全局脚本。",
+  "Auto (Preview)": "自动 (预览)",
+  "Auto": "自动",
+  "Ask before all commands.": "所有命令均需手动批准。",
+  "Require Review": "需要审查",
+  "Proceed in Sandbox": "在沙盒中执行",
+  "Yes, save rule in this conversation": "是，在此会话中保存规则",
+  "Yes, and always allow in this conversation": "是，且在此会话中始终允许",
+  "Yes, save rule in this project": "是，在此项目中保存规则",
+  "Yes, and always allow in this project": "是，且在此项目中始终允许",
+  "Yes, save rule when not in a project": "是，在项目外部保存规则",
+  "Yes, and always allow when not in a project": "是，且在项目外部始终允许",
+  "Yes, save rule in this workspace": "是，在此工作区中保存规则",
+  "Yes, and always allow in this workspace": "是，且在此工作区中始终允许",
+  "Yes, save rule globally": "是，全局保存规则",
+  "Yes, and always allow": "是，始终允许",
+  "Allow Once": "仅允许一次",
+  "Allow once": "仅允许一次",
+  "Always Allow": "始终允许",
+  "Always run": "始终运行",
+  "Ask first": "询问后再执行",
+  "Close Tab": "关闭标签页",
+  "Close Other Tabs": "关闭其他标签页",
+  "Close Tabs to the Right": "关闭右侧标签页",
+  "Close Terminal Tab": "关闭终端标签页",
+  "New Tab": "新建标签页",
+  "New Terminal Tab": "新建终端标签页",
+  "New Window": "新建窗口",
+  "Copy File Path": "复制文件路径",
+  "Copy File Name": "复制文件名",
+  "Copy Image": "复制图片",
+  "Copy Image Address": "复制图片地址",
+  "Copy Link Address": "复制链接地址",
+  "Copy Message": "复制消息",
+  "Copy command": "复制命令",
+  "Copy output": "复制输出内容",
+  "Copy thinking": "复制思考过程",
+  "Mark All as Read": "全部标记为已读",
+  "Pinned Conversations": "已置顶会话",
+  "Find in Conversation": "在会话中查找",
+  "Find in Pane": "在面板中查找",
+  "Proceed with Plan": "继续执行规划",
+  "Quote Selection": "引用所选内容",
+  "Add to Chat": "添加到对话",
+  "Add to Chat/Quote": "添加到对话/引用",
+  "Add inline comment": "添加行内评论",
+  "Comment on Selection": "对所选内容发表评论",
+  "Cancel Generation": "取消生成",
+  "Capture Screenshot": "截取屏幕",
+  "Clear Search": "清空搜索",
+  "Clear search": "清空搜索",
+  "Click to copy URL": "点击复制链接",
+  "Click to copy full command": "点击复制完整命令",
+  "Double-click to reset panel sizes": "双击重置面板尺寸",
+  "Drag to resize, double-click to reset": "拖动调整大小，双击重置",
+  "Danger Zone": "危险区域",
+  "Save Image": "保存图片",
+  "Save Video": "保存视频",
+  "Save Configuration": "保存配置",
+  "Upload Files": "上传文件",
+  "Write a comment...": "写下评论...",
+  "Sign out": "退出登录",
+  "Signing Out...": "正在退出登录...",
+  "Sign in": "登录",
+  "Sign-in required": "需要登录",
+  "Action required": "需要操作",
+  "Input required": "需要输入",
+  "Verification required": "需要验证",
+  "Manage Skills": "管理技能",
+  "Installed Skills": "已安装技能",
+  "Discover helpful skills & plugins": "发现实用技能与插件",
+  "Explore the plugin marketplace": "浏览插件市场",
+  "Open Preferences": "打开偏好设置",
+  "Open Keyboard Shortcuts": "打开快捷键",
+  "Open Link in New Tab": "在新标签页中打开链接",
+  "Open Link in External Browser": "在外部浏览器中打开链接",
+  "Open in External Browser": "在外部浏览器中打开",
+  "Open in Built-in Browser": "在内置浏览器中打开",
+  "Open Image in New Tab": "在新标签页中打开图片",
+  "Next Page": "下一页",
+  "Previous Page": "上一页",
+  "Next match": "下一个匹配项",
+  "Previous match": "上一个匹配项",
+  "Toggle Terminal": "切换终端面板",
+  "Toggle Editor": "切换编辑器",
+  "Toggle Status Bar": "切换状态栏",
+  "Toggle File Viewer": "切换文件查看器",
+  "Toggle Model Selector": "切换模型选择器",
+  "Toggle Project Selector": "切换项目选择器",
+  "Sort By": "排序方式",
+  "Sort Conversations": "排序会话",
+  "Token Usage": "Token 用量",
+  "Step Details": "步骤详情",
+  "Step Type": "步骤类型",
+  "Tool Execution": "工具执行",
+  "Tool Call Generation": "工具调用生成",
+  "Allow/deny agent read access to specific files or directories.": "允许/禁止智能体读取特定文件或目录。",
+  "Allow/deny agent write access to specific files or directories.": "允许/禁止智能体写入特定文件或目录。",
+  "Allow/deny agent read access to specific URLs or domains.": "允许/禁止智能体读取特定 URL 或域名。",
+  "Allow/deny agent browser actuation access to specific URLs.": "允许/禁止智能体在特定 URL 上执行浏览器自动化操作。",
+  "Give the agent awareness of lint errors created by its edits so it can fix them without explicit prompting.": "让智能体感知其编辑产生的代码 Lint 检查错误，无需显式提示即可自动修复。"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1088,6 +1230,89 @@
       regex: /^Update Available[:\s]+v?([0-9.]+)$/i,
       replacer: function(_, ver) {
         return '发现新版本可用 (v' + ver + ')';
+      }
+    },
+
+        // Permission prompts with dynamic command targets
+    {
+      regex: /^Yes, save rule for '(.+?)' in this conversation$/i,
+      replacer: function(_, target) {
+        return "是，在此会话中保存规则：'" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, and always allow '(.+?)' in this conversation$/i,
+      replacer: function(_, target) {
+        return "是，且在此会话中始终允许 '" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, save rule for '(.+?)' in this project$/i,
+      replacer: function(_, target) {
+        return "是，在此项目中保存规则：'" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, and always allow '(.+?)' in this project$/i,
+      replacer: function(_, target) {
+        return "是，且在此项目中始终允许 '" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, save rule for '(.+?)' when not in a project$/i,
+      replacer: function(_, target) {
+        return "是，在项目外部保存规则：'" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, and always allow '(.+?)' when not in a project$/i,
+      replacer: function(_, target) {
+        return "是，且在项目外部始终允许 '" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, save rule for '(.+?)' in this workspace$/i,
+      replacer: function(_, target) {
+        return "是，在此工作区中保存规则：'" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, and always allow '(.+?)' in this workspace$/i,
+      replacer: function(_, target) {
+        return "是，且在此工作区中始终允许 '" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, save rule for '(.+?)' globally$/i,
+      replacer: function(_, target) {
+        return "是，全局保存规则：'" + target + "'";
+      }
+    },
+    {
+      regex: /^Yes, and always allow '(.+?)'$/i,
+      replacer: function(_, target) {
+        return "是，始终允许 '" + target + "'";
+      }
+    },
+
+    // Project manage subtexts
+    {
+      regex: /^Manage (.+?) (folders|resources), agent settings, and permissions.$/i,
+      replacer: function(_, name, kind) {
+        const kStr = kind === 'resources' ? '资源' : '文件夹';
+        return '管理 ' + name + ' ' + kStr + '、智能体设置及权限。';
+      }
+    },
+    {
+      regex: /^Agent settings and permissions for conversations outside of (.+?).$/i,
+      replacer: function(_, entity) {
+        return entity + ' 外部会话的智能体设置及权限。';
+      }
+    },
+    {
+      regex: /^Inherits your Global Permissions when working (.+?).$/i,
+      replacer: function(_, scope) {
+        return '在此工作时继承您的全局权限 (' + scope + ')。';
       }
     },
 
