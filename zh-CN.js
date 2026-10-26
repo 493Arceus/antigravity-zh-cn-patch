@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-17T00:41:16.523Z
+ * Auto-generated: 2026-10-26T03:30:46.357Z
  */
 (function() {
   'use strict';
@@ -807,7 +807,73 @@
   "Telemetry": "遥测记录",
   "More options": "更多选项",
   "Stop execution": "停止执行",
-  "Share Conversation (Preview)": "共享会话 (预览)"
+  "Share Conversation (Preview)": "共享会话 (预览)",
+  "Downloading Update": "正在下载更新",
+  "Downloading Update...": "正在下载更新...",
+  "Downloading update": "正在下载更新",
+  "Downloading update...": "正在下载更新...",
+  "Downloading...": "正在下载...",
+  "Downloading update (already in progress)": "正在下载更新 (已在进行中)",
+  "Install Update": "安装更新",
+  "Install update": "安装更新",
+  "Installing Update": "正在安装更新",
+  "Installing update": "正在安装更新",
+  "Installing Update...": "正在安装更新...",
+  "Installing update...": "正在安装更新...",
+  "Updating…": "正在更新…",
+  "Updating...": "正在更新...",
+  "Updating": "正在更新",
+  "Downloading": "正在下载",
+  "Loading": "正在加载",
+  "Installing": "正在安装",
+  "Restarting": "正在重启",
+  "Restart to Update": "重启以更新",
+  "Restart to update": "重启以更新",
+  "Restart to Update →": "重启以更新 →",
+  "Restart to update →": "重启以更新 →",
+  "Restart to Apply": "重启以应用",
+  "Restart to apply": "重启以应用",
+  "Restart to Apply Update": "重启以应用更新",
+  "Restart to apply update": "重启以应用更新",
+  "Restart and Update": "重启并更新",
+  "Restart and update": "重启并更新",
+  "Restart & Update": "重启并更新",
+  "Restart now": "立即重启",
+  "Restart Now": "立即重启",
+  "Restart Later": "稍后重启",
+  "Restart later": "稍后重启",
+  "Restart app": "重启应用",
+  "Restart App": "重启应用",
+  "Restart client": "重启客户端",
+  "Restart Client": "重启客户端",
+  "Restart": "重启",
+  "Checking for Updates...": "正在检查更新...",
+  "Checking for update": "正在检查更新",
+  "Checking for update...": "正在检查更新...",
+  "Checking for update (already in progress)": "正在检查更新 (已在进行中)",
+  "Update available": "发现新版本可用",
+  "No updates available": "当前已是最新版本",
+  "A new update is ready to install": "新版本已准备就绪，可供安装",
+  "Auto install update on quit": "退出时自动安装更新",
+  "Nothing is able to perform the update.": "无法执行更新。",
+  "No update service found": "未找到更新服务",
+  "To update:": "更新方法：",
+  "Updating will restart the server and apply the latest changes.": "更新将重启服务器并应用最新更改。",
+  "Active Tasks & Conversations:": "活跃任务与会话：",
+  "You have a conversation in progress. Updating will interrupt it, and it will automatically resume once the update completes.": "您有正在进行中的会话。更新将中断该会话，并在更新完成后自动恢复。",
+  "You have a conversation in progress. Updating will cancel it and you'll need to manually restart it.": "您有正在进行中的会话。更新将取消该会话，您需要手动重新开始。",
+  "Updates to your sidebar": "侧边栏更新说明",
+  "Sidebar Updates": "侧边栏更新",
+  "Did restarting the desktop app help?": "重启桌面应用是否解决了问题？",
+  "Dismiss artifact update notice": "忽略产物更新通知",
+  "Artifact updated by agent": "智能体已更新产物",
+  "Restart Main Language Server": "重启主语言服务器 (Language Server)",
+  "MCP Restart Error:": "MCP 重启错误：",
+  "Download SVG": "下载 SVG",
+  "Download image": "下载图片",
+  "Download video": "下载视频",
+  "Download feature is not available.": "下载功能暂不可用。",
+  "Download the bundle manually and share it instead:": "手动下载资源包并进行共享："
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -991,6 +1057,40 @@
       }
     },
 
+    // Update confirmation dialogs with dynamic conversation counts
+    {
+      regex: /^You have ([0-9]+) conversations? in progress\. Updating will interrupt (?:them|it), and (?:they|it) will automatically resume once the update completes\.$/i,
+      replacer: function(_, count) {
+        return '您有 ' + count + ' 个正在进行中的会话。更新将中断这些会话，并在更新完成后自动恢复。';
+      }
+    },
+    {
+      regex: /^You have ([0-9]+) conversations? in progress\. Updating will cancel (?:them|it) and you\'ll need to manually restart (?:them|it)\.$/i,
+      replacer: function(_, count) {
+        return '您有 ' + count + ' 个正在进行中的会话。更新将取消这些会话，您需要手动重新开始。';
+      }
+    },
+
+    // Downloading and installing update with percentage/progress
+    {
+      regex: /^Downloading Update\s*\(?([0-9]+%?)\)?$/i,
+      replacer: function(_, prog) {
+        return '正在下载更新 (' + prog + ')';
+      }
+    },
+    {
+      regex: /^Installing Update\s*\(?([0-9]+%?)\)?$/i,
+      replacer: function(_, prog) {
+        return '正在安装更新 (' + prog + ')';
+      }
+    },
+    {
+      regex: /^Update Available[:\s]+v?([0-9.]+)$/i,
+      replacer: function(_, ver) {
+        return '发现新版本可用 (v' + ver + ')';
+      }
+    },
+
     // File and Task Counts
     { regex: /^([0-9]+)\s+files?\s+changed$/i, replace: "$1 个文件已修改" },
     { regex: /^([0-9]+)\s+additions?$/i, replace: "$1 处新增" },
@@ -1051,8 +1151,8 @@
       return str.replace(trimmed, DICT_LOWER[lower]);
     }
 
-    // C. Prefix stripped matching (+, -, •, ·, *)
-    const prefixMatch = /^([+\-•·*]\s*)(.+)$/.exec(trimmed);
+    // C. Prefix stripped matching (+, -, •, ·, *, →, ←, etc.)
+    const prefixMatch = /^([+\-•·*→←✓✔✕✖\u2192\u2190]\s*)(.+)$/.exec(trimmed);
     if (prefixMatch) {
       const sym = prefixMatch[1];
       const rest = prefixMatch[2].trim();
@@ -1074,6 +1174,19 @@
       }
       if (DICT_LOWER[base.toLowerCase()]) {
         return str.replace(trimmed, DICT_LOWER[base.toLowerCase()] + countPart);
+      }
+    }
+
+    // D2. Trailing arrow / chevron stripped matching (e.g. "Restart to Update →", "Learn more →", "Continue →")
+    const arrowMatch = /^(.+?)(\s*[→\->\u2192\u21d2»›>]+)$/.exec(trimmed);
+    if (arrowMatch) {
+      const base = arrowMatch[1].trim();
+      const arrowPart = arrowMatch[2];
+      if (DICT[base]) {
+        return str.replace(trimmed, DICT[base] + arrowPart);
+      }
+      if (DICT_LOWER[base.toLowerCase()]) {
+        return str.replace(trimmed, DICT_LOWER[base.toLowerCase()] + arrowPart);
       }
     }
 
