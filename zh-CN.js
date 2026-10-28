@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-28T09:46:38.433Z
+ * Auto-generated: 2026-10-28T12:02:34.839Z
  */
 (function() {
   'use strict';
@@ -1258,7 +1258,23 @@
   "Any error messages seen when trying to log in": "尝试登录时看到的任何错误信息",
   "Use this form if you cannot connect to Remote Control. If your instance is already connected and you are experiencing issues in the browser, report directly from the Remote Control web page so that relevant logs are included. Some helpful information includes:": "如果您无法连接到远程控制，请使用此表单。如果您的实例已连接且您在浏览器中遇到问题，请直接在远程控制网页中报告，以便包含相关日志。有帮助的信息包括：",
   "Whether it never connects or is intermittent/flaky": "是始终无法连接还是断断续续/不稳定",
-  "For any feedback that does not fit into the above categories.": "适用于不属于以上类别的任何反馈。"
+  "For any feedback that does not fit into the above categories.": "适用于不属于以上类别的任何反馈。",
+  "When toggled on, Antigravity collects usage data to help Google enhance performance and features.": "开启后，AntiGravity 将收集使用数据以协助 Google 提升性能和功能。",
+  "When toggled on, AntiGravity collects usage data to help Google enhance performance and features.": "开启后，AntiGravity 将收集使用数据以协助 Google 提升性能和功能。",
+  "When toggled on, Google Antigravity collects usage data to help Google enhance performance and features.": "开启后，Google AntiGravity 将收集使用数据以协助 Google 提升性能和功能。",
+  "Receive product updates, tips, and promotions from Google Antigravity via email.": "通过电子邮件接收来自 Google AntiGravity 的产品更新、使用技巧和促销信息。",
+  "Receive product updates, tips, and promotions from Google AntiGravity via email.": "通过电子邮件接收来自 Google AntiGravity 的产品更新、使用技巧和促销信息。",
+  "Receive product updates, tips, and promotions from Antigravity via email.": "通过电子邮件接收来自 AntiGravity 的产品更新、使用技巧和促销信息。",
+  "Receive product updates, tips, and promotions from AntiGravity via email.": "通过电子邮件接收来自 AntiGravity 的产品更新、使用技巧和促销信息。",
+  "Authenticated via Enterprise Gateway": "通过企业网关认证",
+  "Project Required": "需要选择项目",
+  "License Required": "需要许可证",
+  "A Google Cloud project is required to use Antigravity.": "使用 AntiGravity 需要关联 Google Cloud 项目。",
+  "A Google Cloud project is required to use AntiGravity.": "使用 AntiGravity 需要关联 Google Cloud 项目。",
+  "A license or project selection is required to use Antigravity.": "使用 AntiGravity 需要许可证或选择项目。",
+  "A license or project selection is required to use AntiGravity.": "使用 AntiGravity 需要许可证或选择项目。",
+  "Manage License": "管理许可证",
+  "You cannot sign out from Remote Control. Please sign out on your local application.": "您无法从远程控制退出登录，请在本地应用程序中退出登录。"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1691,7 +1707,39 @@
 
     // Build stamps
     { regex: /^Built on:\s*(.+)$/i, replace: "构建时间: $1" },
-    { regex: /^Built at CL:\s*(.+)$/i, replace: "构建版本号 (CL): $1" }
+    { regex: /^Built at CL:\s*(.+)$/i, replace: "构建版本号 (CL): $1" },
+
+    // Account settings dynamic telemetry, marketing emails & auth nudges
+    {
+      regex: /^When toggled on,\s+(.+?)\s+collects usage data to help Google enhance performance and features\.?$/i,
+      replacer: function(_, prod) {
+        return '开启后，' + prod + ' 将收集使用数据以协助 Google 提升性能和功能。';
+      }
+    },
+    {
+      regex: /^Receive product updates, tips, and promotions from\s+(.+?)\s+via email\.?$/i,
+      replacer: function(_, prod) {
+        return '通过电子邮件接收来自 ' + prod + ' 的产品更新、使用技巧和促销信息。';
+      }
+    },
+    {
+      regex: /^A Google Cloud project is required to use\s+(.+?)\.?$/i,
+      replacer: function(_, prod) {
+        return '使用 ' + prod + ' 需要关联 Google Cloud 项目。';
+      }
+    },
+    {
+      regex: /^A license or project selection is required to use\s+(.+?)\.?$/i,
+      replacer: function(_, prod) {
+        return '使用 ' + prod + ' 需要许可证或选择项目。';
+      }
+    },
+    {
+      regex: /^Sign in to use\s+(.+?)!$/i,
+      replacer: function(_, prod) {
+        return '登录以使用 ' + prod + '！';
+      }
+    }
   ];
 
   // 5. Skip code blocks and rich text editors to protect developer code
@@ -1807,6 +1855,8 @@
 
     return null;
   }
+
+  window.__AGY_TRANSLATE__ = translateString;
 
   // 7. Translate DOM Node
   function translateNode(node) {
