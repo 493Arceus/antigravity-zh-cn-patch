@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-26T09:34:45.104Z
+ * Auto-generated: 2026-10-28T09:46:38.433Z
  */
 (function() {
   'use strict';
@@ -746,8 +746,8 @@
   "Minimize": "最小化",
   "Maximize": "最大化",
   "Configure the browser subagent. It requires": "配置浏览器子智能体。此功能需要系统中已安装 ",
-  "to be installed.": " 浏览器。",
-  "The browser subagent can be invoked by typing /browser in the conversation input box.": "在对话输入框中键入 /browser 即可调用浏览器子智能体。",
+  "to be installed.": "。",
+  "The browser subagent can be invoked by typing /browser in the conversation input box.": "您可以在对话输入框中输入 /browser 来调用浏览器子智能体。",
   "The browser subagent has been disabled by your administrator. Contact your administrator to enable browser use.": "您的管理员已禁用浏览器子智能体。请联系管理员以启用浏览器功能。",
   "not visible in the agent's sandbox and is shared across all your projects.": "在智能体沙盒中不可见，并在所有项目中共享。",
   "Create a token": "创建 Token 凭据",
@@ -1203,7 +1203,62 @@
   "Document file size exceeds 10MB limit": "文档文件大小超过 10MB 限制",
   "PDF file size exceeds 10MB limit": "PDF 文件大小超过 10MB 限制",
   "Text file size exceeds 1MB limit": "文本文件大小超过 1MB 限制",
-  "Zip file size exceeds 20MB limit": "Zip 文件大小超过 20MB 限制"
+  "Zip file size exceeds 20MB limit": "Zip 文件大小超过 20MB 限制",
+  "Usage": "用量",
+  "5h limit": "5小时额度",
+  "5h Limit": "5小时额度",
+  "5H Limit": "5小时额度",
+  "5h limit remaining": "5小时剩余额度",
+  "5h Limit Remaining": "5小时剩余额度",
+  "5H Limit Remaining": "5小时剩余额度",
+  "to be installed": "。",
+  "Go Back": "后退",
+  "Go Forward": "前进",
+  "File Picker": "文件选择器",
+  "Go Back in Pane": "在面板中后退",
+  "Go Forward in Pane": "在面板中前进",
+  "Toggle Between Light/Dark Themes": "切换浅色/深色主题",
+  "Terminal: Add to Chat": "终端：添加到聊天",
+  "Complete Onboarding Step": "完成新手引导步骤",
+  "Feedback Type": "反馈类型",
+  "Bug Report": "问题报告",
+  "Feature Request": "功能建议",
+  "Auth and Billing": "认证与账单",
+  "Remote Control Issue": "远程控制问题",
+  "General Feedback": "通用反馈",
+  "Description": "描述",
+  "Please describe the issue in detail. The more actionable your feedback, the quicker our team can address your request. Some helpful information includes:": "请详细描述该问题。您的反馈越具体，我们的团队就能越快处理您的请求。有帮助的信息包括：",
+  "Steps to reproduce the issue": "复现问题的步骤",
+  "Expected behavior": "预期行为",
+  "Actual behavior": "实际行为",
+  "Any error messages": "任何错误信息",
+  "Any relevant information": "任何相关信息",
+  "Describe the bug you encountered...": "请描述您遇到的问题...",
+  "Describe the feature you would like to see...": "请描述您期望看到的功能...",
+  "Describe your auth or billing issue...": "请描述您的认证或账单问题...",
+  "Describe your Remote Control issue...": "请描述您的远程控制问题...",
+  "Enter your feedback here...": "请在此输入您的反馈...",
+  "Steps to Reproduce": "复现步骤",
+  "Please list the steps to reproduce the issue": "请列出复现此问题的步骤",
+  "Attach a screenshot (optional)": "附加屏幕截图（可选）",
+  "Screenshot must be under 10 MB": "截图大小必须在 10 MB 以内",
+  "Attach Antigravity server logs": "附带 AntiGravity 服务端日志",
+  "Attaching logs requires an email address": "附带日志需要提供邮箱地址",
+  "Submitting...": "正在提交...",
+  "Thank you! Your feedback has been submitted successfully.": "感谢您！您的反馈已成功提交。",
+  "An error occurred while submitting your feedback. Please try again.": "提交反馈时出错，请重试。",
+  "We recommend attaching logs. Attaching logs will help the Antigravity team act on and prioritize your feedback.": "我们建议附带日志。附带日志有助于 AntiGravity 团队处理并优先考虑您的反馈。",
+  "Please describe the feature you'd like to see. The more detailed the requirements, the easier it will be for our team to incorporate your ideas. Some helpful information includes:": "请描述您期望看到的功能。需求越详细，我们的团队就越容易采纳您的想法。有帮助的信息包括：",
+  "What is missing in your workflow": "您的工作流中缺少了什么",
+  "What you would like to see to address this gap in your workflow": "您希望通过什么功能来弥补这一工作流缺失",
+  "How this feature would help you and other users": "该功能将如何帮助您和其他用户",
+  "Please describe your auth or billing issue. More details will help our support team resolve your issue quicker. Some helpful information includes:": "请描述您的认证或账单问题。更详细的信息将帮助我们的支持团队更快解决您的问题。有帮助的信息包括：",
+  "What quota or feature is being incorrectly limited": "哪个配额或功能被错误地限制了",
+  "What functionality you expect your account tier to have available that is missing": "您期望您的账户层级拥有哪些缺失的功能",
+  "Any error messages seen when trying to log in": "尝试登录时看到的任何错误信息",
+  "Use this form if you cannot connect to Remote Control. If your instance is already connected and you are experiencing issues in the browser, report directly from the Remote Control web page so that relevant logs are included. Some helpful information includes:": "如果您无法连接到远程控制，请使用此表单。如果您的实例已连接且您在浏览器中遇到问题，请直接在远程控制网页中报告，以便包含相关日志。有帮助的信息包括：",
+  "Whether it never connects or is intermittent/flaky": "是始终无法连接还是断断续续/不稳定",
+  "For any feedback that does not fit into the above categories.": "适用于不属于以上类别的任何反馈。"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1339,6 +1394,41 @@
     },
 
     // Dynamic Quota Strings
+    // Percentage remaining (e.g. "66% left", "100% left", "49% left")
+    {
+      regex: /^([0-9]+(?:\.[0-9]+)?)\s*%\s*left$/i,
+      replacer: function(_, pct) {
+        return '剩余 ' + pct + '%';
+      }
+    },
+    {
+      regex: /^([0-9]+(?:\.[0-9]+)?)\s*%\s*remaining$/i,
+      replacer: function(_, pct) {
+        return '剩余 ' + pct + '%';
+      }
+    },
+
+    // Models within this group (Image 3 tooltip)
+    {
+      regex: /^Models within this group:\s*(.+)$/i,
+      replacer: function(_, models) {
+        return '此分组包含的模型：' + models.trim();
+      }
+    },
+    {
+      regex: /^Models in this group:\s*(.+)$/i,
+      replacer: function(_, models) {
+        return '此分组包含的模型：' + models.trim();
+      }
+    },
+
+    // Send feedback as (Image 5)
+    {
+      regex: /^Send feedback as\s+(.+)$/i,
+      replacer: function(_, email) {
+        return '以 ' + email.trim() + ' 身份发送反馈';
+      }
+    },
     // Dynamic Model Quota Limit Hit (User Reported)
     {
       regex: /^You have hit your (.+?) limit, so the (.+?) limit does not currently apply\.\s*Your (.+?) limit will refresh in\s*(.+?)\.?$/i,
