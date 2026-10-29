@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-29T02:04:11.552Z
+ * Auto-generated: 2026-10-29T03:15:49.186Z
  */
 (function() {
   'use strict';
@@ -1019,7 +1019,7 @@
   "Extensions": "扩展",
   "Android Compose Preview": "Android Compose 预览",
   "Android Device Hub": "Android 设备中心",
-  "Goals": "目标任务",
+  "Goals": "目标",
   "Customize Sections": "自定义面板区域",
   "Documents": "文档",
   "Links": "链接",
@@ -1325,7 +1325,17 @@
   "Search past workspaces...": "搜索历史工作区...",
   "Search past worktrees...": "搜索历史工作树...",
   "Previous Worktrees": "历史工作树",
-  "Unknown Environment": "未知环境"
+  "Unknown Environment": "未知环境",
+  "Background Commands": "后台命令",
+  "Background Command": "后台命令",
+  "Browser Subagent": "浏览器子智能体",
+  "Browser Subagents": "浏览器子智能体",
+  "Browser Subagent Viewer": "浏览器子智能体查看器",
+  "Browser Task": "浏览器任务",
+  "Visit": "请访问",
+  "Legal Help": "法律帮助中心",
+  "to ask for content changes for legal reasons.": "以出于法律原因申请修改内容。",
+  "Visit Legal Help to ask for content changes for legal reasons.": "请访问法律帮助中心以出于法律原因申请修改内容。"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1850,6 +1860,24 @@
       replacer: function(_, target) {
         return '对话开始时自动创建新的 ' + target + ' 工作区';
       }
+    },
+
+    // Overview panel background commands with count
+    {
+      regex: /^Background Commands?\s+([0-9]+)$/i,
+      replacer: function(_, count) {
+        return '后台命令 ' + count;
+      }
+    },
+    // Legal help trailing sentence with flexible whitespace
+    {
+      regex: /^to ask for content changes for legal reasons\.?$/i,
+      replace: "以出于法律原因申请修改内容。"
+    },
+    // Full sentence fallback
+    {
+      regex: /^Visit\s+Legal Help\s+to ask for content changes for legal reasons\.?$/i,
+      replace: "请访问法律帮助中心以出于法律原因申请修改内容。"
     }
   ];
 
