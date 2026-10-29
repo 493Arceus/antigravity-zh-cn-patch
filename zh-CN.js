@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-28T12:02:34.839Z
+ * Auto-generated: 2026-10-29T02:04:11.552Z
  */
 (function() {
   'use strict';
@@ -1046,7 +1046,7 @@
   "No browser pages open": "没有打开的浏览器标签页",
   "No skills available": "暂无可用的技能",
   "No resources available": "暂无可用的资源",
-  "No environments found": "未找到环境",
+  "No environments found": "未找到相关环境",
   "No files or folders found": "未找到文件或文件夹",
   "No folder selected": "未选择文件夹",
   "No project selected": "未选择项目",
@@ -1059,7 +1059,7 @@
   "No matching results": "没有匹配的结果",
   "No remote configured": "未配置远程仓库",
   "No workspaces found": "未找到工作区",
-  "No previous worktrees": "暂无之前的 Worktree",
+  "No previous worktrees": "暂无历史工作树",
   "No data available": "暂无数据",
   "No description": "无描述",
   "No description available": "暂无描述",
@@ -1274,7 +1274,58 @@
   "A license or project selection is required to use Antigravity.": "使用 AntiGravity 需要许可证或选择项目。",
   "A license or project selection is required to use AntiGravity.": "使用 AntiGravity 需要许可证或选择项目。",
   "Manage License": "管理许可证",
-  "You cannot sign out from Remote Control. Please sign out on your local application.": "您无法从远程控制退出登录，请在本地应用程序中退出登录。"
+  "You cannot sign out from Remote Control. Please sign out on your local application.": "您无法从远程控制退出登录，请在本地应用程序中退出登录。",
+  "Built-in Browser": "内置浏览器",
+  "Configure link opening and built-in browser preferences.": "配置链接打开方式与内置浏览器偏好设置。",
+  "Side Panel Preview": "侧边栏预览",
+  "Configure link opening and side panel preview preferences.": "配置链接打开方式与侧边栏预览偏好设置。",
+  "Open Links In": "默认链接打开方式",
+  "Choose where links open by default when clicked.": "选择点击链接时的默认打开方式。",
+  "External Browser": "外部浏览器",
+  "to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.": "。您可以在对话输入框中输入 /browser 来调用浏览器子智能体。",
+  "Search shortcuts...": "搜索快捷键...",
+  "Search tasks...": "搜索任务...",
+  "Search automations...": "搜索自动化...",
+  "Reopen Closed Tab": "重新打开关闭的标签页",
+  "Move Conversation Up": "向上移动对话",
+  "Move Conversation Down": "向下移动对话",
+  "Mute Live Chat Mic": "静音实时语音对话麦克风",
+  "Toggle Maximize Auxiliary Pane": "切换最大化辅助面板",
+  "Toggle Environment Selector": "切换环境选择器",
+  "Continue Response": "继续响应",
+  "Refresh gcert Credentials": "刷新 gcert 凭证",
+  "Cut": "剪切",
+  "Paste": "粘贴",
+  "Forward": "前进",
+  "Reload": "重新加载",
+  "Edit Shortcut": "编辑快捷键",
+  "Add Shortcut": "添加快捷键",
+  "Remove Shortcut": "移除快捷键",
+  "Reset to Default": "恢复默认设置",
+  "Context Providers": "上下文提供者",
+  "Open in Side Panel": "在侧边栏中打开",
+  "This Computer": "此计算机",
+  "In Progress": "进行中",
+  "Undo to Here": "撤销至此处",
+  "Commands": "命令",
+  "Output": "输出",
+  "Errors": "错误",
+  "Other Customizations": "其他扩展",
+  "Hide breakdown": "收起明细",
+  "Hide breakdowns": "收起明细",
+  "Show 1 breakdown": "显示 1 项明细",
+  "Customization token budget exceeded. Large customizations are excluded from context.": "超出扩展 Token 限额。过大的扩展项已从上下文中排除。",
+  "Rules and customization token budgets exceeded. Large rules are demoted to path pointers and large customizations are excluded from context.": "超出规则与扩展 Token 限额。较长的规则已降级为路径指针，过大的扩展项已从上下文中排除。",
+  "Rules token budget exceeded. Large rules are demoted to path pointers.": "超出规则 Token 限额。较长的规则已降级为路径指针。",
+  "Local Checkout": "本地检出",
+  "New Worktree": "新建工作树",
+  "Select Worktree": "选择工作树",
+  "Select Environment": "选择工作环境",
+  "Loading worktrees...": "正在加载工作树...",
+  "Search past workspaces...": "搜索历史工作区...",
+  "Search past worktrees...": "搜索历史工作树...",
+  "Previous Worktrees": "历史工作树",
+  "Unknown Environment": "未知环境"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1738,6 +1789,66 @@
       regex: /^Sign in to use\s+(.+?)!$/i,
       replacer: function(_, prod) {
         return '登录以使用 ' + prod + '！';
+      }
+    },
+
+    // Show N breakdown(s)
+    {
+      regex: /^Show\s+([0-9]+)\s+breakdowns?$/i,
+      replacer: function(_, count) {
+        return '显示 ' + count + ' 项明细';
+      }
+    },
+
+    // Browser subagent description trailing sentence
+    {
+      regex: /^to be installed\.\s+The browser subagent can be invoked by typing \/browser in the conversation input box\.?$/i,
+      replace: "。您可以在对话输入框中输入 /browser 来调用浏览器子智能体。"
+    },
+
+    // MCP / Customization budget tooltips
+    {
+      regex: /^All tools in this MCP server \((.+?)\) exceeded the customization budget and were excluded from context\.?$/i,
+      replacer: function(_, tok) {
+        return '此 MCP 服务器中的所有工具 (' + tok + ') 已超出扩展 Token 限额并已从上下文中排除。';
+      }
+    },
+    {
+      regex: /^([0-9]+)\s+tools?\s+in this MCP server \((.+?)\) exceeded the customization budget and were excluded from context\.?$/i,
+      replacer: function(_, count, tok) {
+        return '此 MCP 服务器中的 ' + count + ' 个工具 (' + tok + ') 已超出扩展 Token 限额并已从上下文中排除。';
+      }
+    },
+    {
+      regex: /^Exceeded the customization token budget \((.+?)\) and was excluded from context\.?$/i,
+      replacer: function(_, tok) {
+        return '超出扩展 Token 限额 (' + tok + ') 并已从上下文中排除。';
+      }
+    },
+
+    // Worktree dynamic options
+    {
+      regex: /^Work in\s+(.+)$/i,
+      replacer: function(_, target) {
+        return '在 ' + target + ' 中工作';
+      }
+    },
+    {
+      regex: /^Work locally on\s+(.+)$/i,
+      replacer: function(_, target) {
+        return '在本地处理 ' + target;
+      }
+    },
+    {
+      regex: /^Worktree from\s+(.+)$/i,
+      replacer: function(_, target) {
+        return '基于 ' + target + ' 的工作树';
+      }
+    },
+    {
+      regex: /^Automatically create a new (.+?) workspace when the conversation starts$/i,
+      replacer: function(_, target) {
+        return '对话开始时自动创建新的 ' + target + ' 工作区';
       }
     }
   ];
