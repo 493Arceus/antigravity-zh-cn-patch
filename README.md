@@ -1,4 +1,4 @@
-> 本项目由 gemini 3.8 flash (high) 编写
+> 💡 **项目说明**：本项目由 493Arceus 与 Google AntiGravity 联合协作开发与编写维护。
 
 # AntiGravity 客户端一键全景深度汉化补丁 (AntiGravity zh-CN Patch)
 
