@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-29T03:15:49.186Z
+ * Auto-generated: 2026-10-30T04:01:09.819Z
  */
 (function() {
   'use strict';
@@ -100,7 +100,7 @@
   "Search files": "搜索文件",
   "Search files...": "搜索文件...",
   "Search conversation...": "搜索对话...",
-  "Search Conversations": "搜索对话历史",
+  "Search Conversations": "搜索对话",
   "Search settings": "搜索设置...",
   "Search commands": "搜索命令",
   "Search file contents...": "搜索文件内容...",
@@ -1039,7 +1039,7 @@
   "No comments yet": "暂无评论",
   "No branches": "暂无分支",
   "No conversations available": "暂无可用对话",
-  "No conversations found": "未找到对话",
+  "No conversations found": "未找到相关对话",
   "No conversations yet": "暂无对话",
   "No pinned conversations": "暂无置顶对话",
   "No conversation selected": "未选择对话",
@@ -1335,7 +1335,27 @@
   "Visit": "请访问",
   "Legal Help": "法律帮助中心",
   "to ask for content changes for legal reasons.": "以出于法律原因申请修改内容。",
-  "Visit Legal Help to ask for content changes for legal reasons.": "请访问法律帮助中心以出于法律原因申请修改内容。"
+  "Visit Legal Help to ask for content changes for legal reasons.": "请访问法律帮助中心以出于法律原因申请修改内容。",
+  "Search Across Conversations": "跨对话搜索",
+  "This page is going away soon": "此页面即将停用",
+  "Search conversations with": "通过左上角的",
+  "in the top left.": "搜索对话。",
+  "in the top left": "搜索对话",
+  "View archived in the sidebar": "在侧边栏中查看已归档内容",
+  "menu)": "菜单)",
+  "menu).": "菜单)。",
+  "Display Options": "显示选项",
+  "Auto Pin": "自动置顶",
+  "Archived Only": "仅查看已归档",
+  "Conversation Archived": "对话已归档",
+  "Search conversations...": "搜索对话...",
+  "Search conversations, commands, and code...": "搜索对话、命令和代码...",
+  "Select category to search...": "选择搜索分类...",
+  "Search for commands...": "搜索命令...",
+  "Search across files...": "在文件中搜索...",
+  "Type to search for code across your workspace.": "输入内容以在工作区中搜索代码。",
+  "View archived in the sidebar (Display options menu).": "在侧边栏中查看已归档内容（“显示选项”菜单）。",
+  "View archived in the sidebar (![filter](icon://filter_list) menu).": "在侧边栏中查看已归档内容（![filter](icon://filter_list) 菜单）。"
 };
 
   // 2. Build Lowercase Lookup Map for Case-Insensitive Fallback
@@ -1878,6 +1898,40 @@
     {
       regex: /^Visit\s+Legal Help\s+to ask for content changes for legal reasons\.?$/i,
       replace: "请访问法律帮助中心以出于法律原因申请修改内容。"
+    },
+
+    // Conversation search nudge & deprecation banner
+    {
+      regex: /^Search conversations with\s*$/i,
+      replace: "通过左上角的"
+    },
+    {
+      regex: /^in the top left\.?$/i,
+      replace: "搜索对话。"
+    },
+    {
+      regex: /^View archived in the sidebar\s*$/i,
+      replace: "在侧边栏中查看已归档内容"
+    },
+    {
+      regex: /^menu\)\.?$/i,
+      replace: "菜单)"
+    },
+    {
+      regex: /^Search conversations with\s+(.+?)\s+in the top left\.?$/i,
+      replacer: function(_, icon) {
+        return '通过左上角的 ' + icon + ' 搜索对话。';
+      }
+    },
+    {
+      regex: /^View archived in the sidebar\s+\((.+?)\s*menu\)\.?$/i,
+      replacer: function(_, menu) {
+        return '在侧边栏中查看已归档内容 (' + menu + ' 菜单)。';
+      }
+    },
+    {
+      regex: /^View archived in the sidebar\s+\(!\[filter\]\(icon:\/\/filter_list\)\s*menu\)\.?$/i,
+      replace: "在侧边栏中查看已归档内容（![filter](icon://filter_list) 菜单）。"
     }
   ];
 
