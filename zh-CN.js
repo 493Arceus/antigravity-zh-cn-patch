@@ -1,7 +1,7 @@
 /**
  * AntiGravity Client Chinese Localization Engine (zh-CN.js)
  * Fully exhaustive, deep-inspected runtime UI translator
- * Auto-generated: 2026-10-30T04:01:09.819Z
+ * Auto-generated: 2026-10-30T06:04:17.972Z
  */
 (function() {
   'use strict';
@@ -1342,6 +1342,16 @@
   "in the top left.": "搜索对话。",
   "in the top left": "搜索对话",
   "View archived in the sidebar": "在侧边栏中查看已归档内容",
+  "View archived in the sidebar (": "在侧边栏中查看已归档内容 (",
+  "View archived in the sidebar(": "在侧边栏中查看已归档内容 (",
+  "View archived in the sidebar (〒 menu).": "在侧边栏中查看已归档内容 (〒 菜单)。",
+  "View archived in the sidebar (〒 menu)": "在侧边栏中查看已归档内容 (〒 菜单)",
+  "View archived in the sidebar (〒 菜单)。": "在侧边栏中查看已归档内容 (〒 菜单)。",
+  "View archived in the sidebar (〒 菜单)": "在侧边栏中查看已归档内容 (〒 菜单)",
+  "View archived in the sidebar ( menu).": "在侧边栏中查看已归档内容 (菜单)。",
+  "View archived in the sidebar ( menu)": "在侧边栏中查看已归档内容 (菜单)",
+  "View archived in the sidebar (menu).": "在侧边栏中查看已归档内容 (菜单)。",
+  "View archived in the sidebar (menu)": "在侧边栏中查看已归档内容 (菜单)",
   "menu)": "菜单)",
   "menu).": "菜单)。",
   "Display Options": "显示选项",
@@ -1910,8 +1920,13 @@
       replace: "搜索对话。"
     },
     {
-      regex: /^View archived in the sidebar\s*$/i,
-      replace: "在侧边栏中查看已归档内容"
+      regex: /^View archived in the sidebar(?:\s*[\(\[（])?$/i,
+      replacer: function(match) {
+        if (/[\(\[（]/.test(match)) {
+          return '在侧边栏中查看已归档内容 (';
+        }
+        return '在侧边栏中查看已归档内容';
+      }
     },
     {
       regex: /^menu\)\.?$/i,
@@ -1924,9 +1939,11 @@
       }
     },
     {
-      regex: /^View archived in the sidebar\s+\((.+?)\s*menu\)\.?$/i,
-      replacer: function(_, menu) {
-        return '在侧边栏中查看已归档内容 (' + menu + ' 菜单)。';
+      regex: /^View archived in the sidebar\s*[\(\[（]?\s*([^)]*?)\s*(?:menu|菜单)\)?(?:[.\u3002])?$/i,
+      replacer: function(_, iconOrText) {
+        const icon = iconOrText ? iconOrText.trim() : '';
+        const sp = icon ? icon + ' ' : '';
+        return '在侧边栏中查看已归档内容 (' + sp + '菜单)。';
       }
     },
     {
@@ -2003,6 +2020,19 @@
       }
       if (DICT_LOWER[base.toLowerCase()]) {
         return str.replace(trimmed, DICT_LOWER[base.toLowerCase()] + arrowPart);
+      }
+    }
+
+    // D3. Trailing delimiter / open parenthesis / bracket stripped matching (e.g. "View archived in the sidebar (")
+    const trailingParenMatch = /^(.+?)(\s*[\(\[（])$/.exec(trimmed);
+    if (trailingParenMatch) {
+      const base = trailingParenMatch[1].trim();
+      const parenPart = trailingParenMatch[2];
+      if (DICT[base]) {
+        return str.replace(trimmed, DICT[base] + parenPart);
+      }
+      if (DICT_LOWER[base.toLowerCase()]) {
+        return str.replace(trimmed, DICT_LOWER[base.toLowerCase()] + parenPart);
       }
     }
 
