@@ -9,6 +9,7 @@ web_bundle_zh/
 tools/
 
 # Temporary extraction files
+*.unpacked/
 *.zip
 *.log
 
