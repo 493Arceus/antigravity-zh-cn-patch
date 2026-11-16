@@ -187,16 +187,31 @@
       : toNum(meta.sourceTrajectoryStepInfo?.stepIndex ?? s.stepIdx ?? -1);
 
     const stepCase = s.step?.case || '';
-    if (stepCase === 'userInput' || s.type === 'USER_INPUT' || s.type === 14 || s.userInput) {
+    if (
+      stepCase === 'userInput' ||
+      s.type === 'USER_INPUT' ||
+      s.type === 'CORTEX_STEP_TYPE_USER_INPUT' ||
+      s.type === 14 ||
+      s.userInput
+    ) {
       return { stepIdx, isUser: true };
     }
+
+    const plannerPreview =
+      (stepCase === 'plannerResponse' ? s.step?.value : null) ||
+      s.plannerResponse ||
+      s.step?.plannerResponse;
+    const isPlannerCase =
+      stepCase === 'plannerResponse' ||
+      Boolean(plannerPreview) ||
+      s.type === 'CORTEX_STEP_TYPE_PLANNER_RESPONSE';
 
     const st = s.status;
     const isGenerating =
       st === 8 ||
       st === 'CORTEX_STEP_STATUS_GENERATING' ||
       st === 'GENERATING' ||
-      ((st === 2 || st === 'CORTEX_STEP_STATUS_RUNNING' || st === 'RUNNING') && stepCase === 'plannerResponse');
+      ((st === 2 || st === 'CORTEX_STEP_STATUS_RUNNING' || st === 'RUNNING') && isPlannerCase);
     const isDone =
       st === 3 ||
       st === 'CORTEX_STEP_STATUS_DONE' ||
@@ -1387,19 +1402,149 @@
     } catch (e) {}
   }
 
+  function decodeGrpcWebBodyJson(body) {
+    try {
+      if (!body) return null;
+      if (typeof body === 'string') return JSON.parse(body);
+      let u8 = null;
+      if (body instanceof Uint8Array) {
+        u8 = body;
+      } else if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
+        u8 = new Uint8Array(body.buffer || body, body.byteOffset || 0, body.byteLength);
+      }
+      if (!u8 || u8.length < 5) return null;
+      if ((u8[0] & 1) !== 0) return null;
+      const frameLen = ((u8[1] << 24) | (u8[2] << 16) | (u8[3] << 8) | u8[4]) >>> 0;
+      if (u8.length < 5 + frameLen) return null;
+      const text = new TextDecoder().decode(u8.subarray(5, 5 + frameLen));
+      return JSON.parse(text);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function hasAnyGeneratingStep(update) {
+    const steps = update?.mainTrajectoryUpdate?.stepsUpdate?.steps;
+    if (!Array.isArray(steps)) return false;
+    for (let i = 0; i < steps.length; i++) {
+      const s = steps[i];
+      if (!s) continue;
+      const st = s.status;
+      const isPlanner =
+        s.step?.case === 'plannerResponse' ||
+        Boolean(s.plannerResponse || s.step?.plannerResponse) ||
+        s.type === 'CORTEX_STEP_TYPE_PLANNER_RESPONSE';
+      if (
+        st === 8 ||
+        st === 'CORTEX_STEP_STATUS_GENERATING' ||
+        st === 'GENERATING' ||
+        ((st === 2 || st === 'CORTEX_STEP_STATUS_RUNNING' || st === 'RUNNING') && isPlanner)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function concatUint8Arrays(a, b) {
+    if (!a || a.length === 0) return b;
+    if (!b || b.length === 0) return a;
+    const out = new Uint8Array(a.length + b.length);
+    out.set(a, 0);
+    out.set(b, a.length);
+    return out;
+  }
+
+  async function consumeGrpcWebAgentStateStream(stream, fallbackConvId) {
+    const reader = stream.getReader();
+    const decoder = new TextDecoder();
+    let buf = new Uint8Array(0);
+    let isFirstFrame = true;
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (!value || value.length === 0) continue;
+
+        buf = concatUint8Arrays(buf, value);
+
+        while (buf.length >= 5) {
+          const flags = buf[0];
+          const frameLen = ((buf[1] << 24) | (buf[2] << 16) | (buf[3] << 8) | buf[4]) >>> 0;
+          if (buf.length < 5 + frameLen) break;
+
+          const payload = buf.subarray(5, 5 + frameLen);
+          buf = buf.subarray(5 + frameLen);
+
+          // 0x00 data frame (ignore trailers 0x80 and compressed frames 0x01)
+          if ((flags & 128) === 0 && (flags & 1) === 0 && payload.length > 0) {
+            try {
+              const msg = JSON.parse(decoder.decode(payload));
+              const update = msg?.update || msg;
+              if (
+                !hookedAsuInstance &&
+                update &&
+                typeof update === 'object' &&
+                (update.mainTrajectoryUpdate || update.costSummary || update.status !== undefined)
+              ) {
+                const convId = update.conversationId || fallbackConvId || getActiveConvId();
+                const isHistoricalReplay = isFirstFrame && !hasAnyGeneratingStep(update);
+                isFirstFrame = false;
+                processAgentStateUpdate(convId, update, isHistoricalReplay);
+              }
+            } catch (e) {}
+          }
+        }
+      }
+    } catch (e) {
+      // Stream aborted or closed
+    } finally {
+      try {
+        reader.releaseLock();
+      } catch (e) {}
+    }
+  }
+
   function setupFetchStartTrigger() {
     const origFetch = globalThis.fetch;
     if (!origFetch || origFetch.__agy_hooked__) return;
 
     const wrappedFetch = function (input, init) {
+      const url = typeof input === 'string' ? input : (input?.url || '');
+      let reqConvId = '';
       try {
-        const url = typeof input === 'string' ? input : (input?.url || '');
         if (/StartCascade|SendUserCascadeMessage/i.test(url)) {
-          const store = getActiveStore();
+          const reqJson = decodeGrpcWebBodyJson(init?.body);
+          const convId = reqJson?.cascadeId || reqJson?.conversationId || '';
+          const store = convId ? getOrCreateStore(convId) : getActiveStore();
           onStoreRequestSubmitted(store);
+        } else if (/StreamAgentStateUpdates/i.test(url)) {
+          const reqJson = decodeGrpcWebBodyJson(init?.body);
+          reqConvId = reqJson?.conversationId || '';
         }
       } catch (e) {}
-      return origFetch.apply(this, arguments);
+
+      const fetchPromise = origFetch.apply(this, arguments);
+
+      if (/StreamAgentStateUpdates/i.test(url) && fetchPromise && typeof fetchPromise.then === 'function') {
+        return fetchPromise.then((res) => {
+          try {
+            if (!hookedAsuInstance && res && res.ok && res.body && typeof res.body.tee === 'function') {
+              const [appStream, tapStream] = res.body.tee();
+              consumeGrpcWebAgentStateStream(tapStream, reqConvId);
+              return new Response(appStream, {
+                status: res.status,
+                statusText: res.statusText,
+                headers: res.headers
+              });
+            }
+          } catch (e) {}
+          return res;
+        });
+      }
+
+      return fetchPromise;
     };
 
     wrappedFetch.__agy_hooked__ = true;
